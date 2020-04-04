@@ -4,7 +4,8 @@ import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import HomeScreen from './Home';
 import DetailsScreen from './Detail'
-
+import StorageTest from './StorageTest'
+import {AsyncStorage} from 'react-native';
 
 const Stack = createStackNavigator();
 
@@ -12,7 +13,7 @@ function App() {
   return (
     <NavigationContainer>
       <Stack.Navigator initialRouteName="Home">
-        <Stack.Screen name="Home" component={HomeScreen}  options={{
+        <Stack.Screen name="StorageTest" component={StorageTest}  options={{
           headerStyle: {
             backgroundColor: '#f4511e',
           },

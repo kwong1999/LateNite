@@ -1,7 +1,10 @@
 import * as React from 'react';
+
 import { View, Text, Button } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
+import {AsyncStorage} from 'react-native';
+
 
  function HomeScreen(props) {
    const { navigation } = props
@@ -12,7 +15,10 @@ import { createStackNavigator } from '@react-navigation/stack';
           },
     });
   }, [navigation]);
+
   return (
+      // Error saving data
+
     <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
       <Text>UGH</Text>
       <Button
