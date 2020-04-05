@@ -16,6 +16,12 @@ export default class Detail extends React.Component{
     try {
       console.log("Hello");
       let item = await AsyncStorage.getItem('my-name');
+
+      let names = await AsyncStorage.getItem('arrayOfNames').then((value) => {
+        const data = JSON.parse(value);
+        console.log(data);
+      });
+
       if(item != null)
       {
         this.setState({username: item});
@@ -27,7 +33,6 @@ export default class Detail extends React.Component{
     catch (error) {
       this.setState({username: "Error, did not work"});
 
-    // Error retrieving data
     }
   }
 
