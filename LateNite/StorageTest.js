@@ -5,6 +5,7 @@ import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import Geolocation from '@react-native-community/geolocation';
 import {AsyncStorage} from 'react-native';
+import opencage from 'opencage-api-client';
 
 const DATA = [
   {
@@ -36,7 +37,9 @@ function Item({ title, menuItem }) {
 export default class StorageTest extends React.Component {
   constructor(props) {
     super(props);
-    this.state = {location: ''};
+    this.state = {lat: ''};
+    this.state = {lon: ''};
+    this.state = {address: ''};
     this.state = {list: [
 	  {
 	    id: 'bd7acbea-c1b1-46c2-aed5-3ad53abb28ba',
@@ -73,17 +76,27 @@ export default class StorageTest extends React.Component {
 
  async componentDidMount()
   {
-  	this.setState({location: 'lllllll'});
+  	let latitude = 0;
+  	let longitude = 0;
   	Geolocation.setRNConfiguration({ authorizationLevel: 'whenInUse', skipPermissionRequests: false, });
   	Geolocation.getCurrentPosition( 
   		(position)  => {
                 this.setState({
-                    location: position.coords.latitude,
+                    lat: position.coords.latitude,
+                    lon: position.coords.longitude,
                 });
+                latitude = position.coords.latitude;
+                longitude = position.coords.longitude;
+                const key = '5c3d93713edb442c825f89b7bc7d3aa4';
+				const coords = latitude + ", " + longitude;
+			    opencage.geocode({ key, q: coords }).then(response => {
+			      result = response.results[0];
+			      this.setState({address: result.formatted});
+			    });
         },
         (error) => {
         this.setState({
-            location: error.code }),
+            lat: error.code }),
             console.log(error.code, error.message);
 		},
 
@@ -95,7 +108,7 @@ export default class StorageTest extends React.Component {
 
             }
     );
-
+	
 
   		
   }
@@ -130,7 +143,8 @@ export default class StorageTest extends React.Component {
           />
         </SafeAreaView>
         <View style = {{flex: 1, alignItems: 'center'}}>
-          <Text>{this.state.location}</Text>
+          <Text>{this.state.address}</Text>
+          <Text>{this.state.lat}</Text>
           <Button
               title="Press me"
               onPress={() => navigation.navigate('Details')}/>
