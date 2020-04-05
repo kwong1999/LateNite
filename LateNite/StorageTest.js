@@ -35,6 +35,23 @@ function Item({ title, menuItem }) {
 export default class StorageTest extends React.Component {
   constructor(props) {
     super(props);
+    this.state = {list: [
+  {
+    id: 'bd7acbea-c1b1-46c2-aed5-3ad53abb28ba',
+    title: 'Dulce',
+    menuItem: 'Glazed Donut'
+  },
+  {
+    id: '3ac68afc-c605-48d3-a4f8-fbd91aa97f63',
+    title: 'Ramen Kenjo',
+    menuItem: 'Tonkatsu Ramen'
+  },
+  {
+    id: '58694a0f-3da1-471f-bd96-145571e29d72',
+    title: 'Honeybird',
+    menuItem: 'Flaming Hot Chicken'
+  },
+]};
     this.setUsername();
 
   }
@@ -44,7 +61,7 @@ export default class StorageTest extends React.Component {
 
     try {
       await AsyncStorage.setItem('my-name', 'Eric');
-      await AsyncStorage.setItem('arrayOfNames', JSON.stringify(names))
+      await AsyncStorage.setItem('arrayOfNames', JSON.stringify(this.state.list))
     } catch (error) {
       console.log("error");
       // Error saving data
@@ -72,7 +89,7 @@ export default class StorageTest extends React.Component {
         </View>
         <SafeAreaView style = {{flex: 1}}>
           <FlatList style = {{flex: 1}}
-            data={DATA}
+            data={this.state.list}
             horizontal={true}
             renderItem={({ item }) => <Item title={item.title} menuItem={item.menuItem}/>}
             keyExtractor={item => item.id}
