@@ -1,8 +1,9 @@
 import * as React from 'react';
 
-import { View, Text, Button, StyleSheet, SafeAreaView, FlatList} from 'react-native';
+import { View, Text, Button, StyleSheet, SafeAreaView, FlatList, Alert} from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
+import Geolocation from '@react-native-community/geolocation';
 import {AsyncStorage} from 'react-native';
 
 const DATA = [
@@ -35,23 +36,25 @@ function Item({ title, menuItem }) {
 export default class StorageTest extends React.Component {
   constructor(props) {
     super(props);
+    this.state = {location: ''};
     this.state = {list: [
-  {
-    id: 'bd7acbea-c1b1-46c2-aed5-3ad53abb28ba',
-    title: 'Dulce',
-    menuItem: 'Glazed Donut'
-  },
-  {
-    id: '3ac68afc-c605-48d3-a4f8-fbd91aa97f63',
-    title: 'Ramen Kenjo',
-    menuItem: 'Tonkatsu Ramen'
-  },
-  {
-    id: '58694a0f-3da1-471f-bd96-145571e29d72',
-    title: 'Honeybird',
-    menuItem: 'Flaming Hot Chicken'
-  },
-]};
+	  {
+	    id: 'bd7acbea-c1b1-46c2-aed5-3ad53abb28ba',
+	    title: 'Dulce',
+	    menuItem: 'Glazed Donut'
+	  },
+	  {
+	    id: '3ac68afc-c605-48d3-a4f8-fbd91aa97f63',
+	    title: 'Ramen Kenjo',
+	    menuItem: 'Tonkatsu Ramen'
+	  },
+	  {
+	    id: '58694a0f-3da1-471f-bd96-145571e29d72',
+	    title: 'Honeybird',
+	    menuItem: 'Flaming Hot Chicken'
+	  },
+	]};
+	
     this.setUsername();
 
   }
@@ -60,13 +63,43 @@ export default class StorageTest extends React.Component {
     let names = ['eric', 'katie', 'chan', 'zade'];
 
     try {
-      await AsyncStorage.setItem('my-name', 'Eric');
+      await AsyncStorage.setItem('my-name', 'EZ');
       await AsyncStorage.setItem('arrayOfNames', JSON.stringify(this.state.list))
     } catch (error) {
       console.log("error");
       // Error saving data
     }
   }
+
+ async componentDidMount()
+  {
+  	this.setState({location: 'lllllll'});
+  	Geolocation.setRNConfiguration({ authorizationLevel: 'whenInUse', skipPermissionRequests: false, });
+  	Geolocation.getCurrentPosition( 
+  		(position)  => {
+                this.setState({
+                    location: position.coords.latitude,
+                });
+        },
+        (error) => {
+        this.setState({
+            location: error.code }),
+            console.log(error.code, error.message);
+		},
+
+            {
+
+                enableHighAccuracy: true,
+ 
+                timeout: 10000
+
+            }
+    );
+
+
+  		
+  }
+
 
   render(){
     const { navigation } = this.props
@@ -97,7 +130,7 @@ export default class StorageTest extends React.Component {
           />
         </SafeAreaView>
         <View style = {{flex: 1, alignItems: 'center'}}>
-          <Text>GGGGG</Text>
+          <Text>{this.state.location}</Text>
           <Button
               title="Press me"
               onPress={() => navigation.navigate('Details')}/>
